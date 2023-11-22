@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -12,7 +14,6 @@ namespace Api.Controllers
     };
 
         private readonly ILogger<WeatherForecastController> _logger;
-
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
