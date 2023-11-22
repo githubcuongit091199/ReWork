@@ -35,5 +35,12 @@ namespace Common.Helper
                 return GetAppConfig("JWT:JwtExpireDays");
             }
         }
+        public static string API_DB_CONNECT
+        {
+            get
+            {
+                return GetAppConfig("ConnectionStrings:ApiConnection");
+            }
+        }
     }
 }

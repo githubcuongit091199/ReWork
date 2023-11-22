@@ -11,7 +11,7 @@ namespace Entities
     {
         public string Name {  get; set; }
         public string Code {  get; set; }
-        public virtual ICollection<ProductTagMap> ProductTagMaps { get; }
+        public virtual ICollection<ProductTagMap> ProductTagMaps { get; set; }
 
     }
 }

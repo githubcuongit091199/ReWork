@@ -1,18 +1,46 @@
+using Api;
 using Common.Helper;
+using Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Principal;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+Settings.Configuration = builder.Configuration;
+builder.Services.AddDbContext<ApiDbContext>(options =>
+                  options.UseSqlServer(
+                      builder.Configuration.GetConnectionString("ApiConnection")
+                  ));
 
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+
+    // Signin settings
+    options.SignIn.RequireConfirmedEmail = false;
+    options.SignIn.RequireConfirmedPhoneNumber = false;
+
+    // User settings
+    options.User.RequireUniqueEmail = false;
+})
+           .AddEntityFrameworkStores<ApiDbContext>()
+           .AddDefaultTokenProviders();
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-Settings.Configuration = builder.Configuration;
 var key = Encoding.ASCII.GetBytes(Settings.JWT_KEY);
 JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -59,7 +87,6 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

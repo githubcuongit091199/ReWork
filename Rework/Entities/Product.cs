@@ -8,7 +8,7 @@ namespace Entities
         public string Description { get; set; }
         public string Image {  get; set; }
         public decimal Price { get; set; }
-        public virtual ICollection<ProductTagMap> ProductTagMaps { get;}
+        public virtual ICollection<ProductTagMap> ProductTagMaps { get; set; }
 
     }
 }

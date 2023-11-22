@@ -11,30 +11,47 @@ namespace Repositories.Implements
 {
     public class ProductRepository : IProductRepository
     {
-        public Guid Add(Product entity)
+        private readonly ApiDbContext _dbContext;
+        public ProductRepository(ApiDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+        public void Add(Product entity)
+        {
+            _dbContext.Products.Add(entity);
+           
         }
 
-        public Guid Delete(Guid id)
+        public bool Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var productToRemove = GetById(id);
+            if (productToRemove != null)
+            {
+                _dbContext.Products.Remove(productToRemove);
+                return true;
+            }
+            return false;
         }
 
         public IEnumerable<Product> GetAll()
         {
-            throw new NotImplementedException();
+            return _dbContext.Products;
         }
 
         public Product GetById(Guid Id)
         {
-            throw new NotImplementedException();
+            return _dbContext.Products.FirstOrDefault(x=>x.Id == Id);
         }
 
 
-        public Guid Update(Product entity)
+        public void Update(Product entity)
         {
-            throw new NotImplementedException();
+            var existingProduct = GetById(entity.Id);
+            if (existingProduct != null)
+            {
+                existingProduct.Name = entity.Name;
+                existingProduct.Price = entity.Price;
+            }
         }
     }
 }

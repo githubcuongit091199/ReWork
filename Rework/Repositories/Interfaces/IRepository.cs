@@ -10,8 +10,8 @@ namespace Repositories.Interfaces
     {
         T GetById(Guid Id);
         IEnumerable<T> GetAll();
-        Guid Add(T entity);
-        Guid Update(T entity);
-        Guid Delete(Guid id);
+        void Add(T entity);
+        void Update(T entity);
+        bool Delete(Guid id);
     }
 }
